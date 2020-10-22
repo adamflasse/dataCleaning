@@ -81,8 +81,20 @@ df = df.replace('None', np.nan).dropna(axis=0, how='any', subset=columns)
 df['area'] = df['area'].apply(lambda x: str(x).strip().replace('m2 ',''))
 df['area'] = pd.to_numeric(df['area'])
 
+#Cleaning the Swimming pool column in the dataframe
+df['swimming_pool_has'] = df['swimming_pool_has'].apply(lambda x : 'Not specified' if pd.isnull(x) else False)
 
-# to be double checked what columns have to be dropped
-df = df.drop(df.columns[[0,1, 2, 3]], axis = 1)
+#Cleaning the Room Number column in the dataframe
+columns = ['rooms_number']
+data_viz01 = df
+df = df.replace(0, np.nan).dropna(axis=0, how='any', subset=columns)
+df = df.replace('None', np.nan).dropna(axis=0, how='any', subset=columns)
+df['rooms_number'] = pd.to_numeric(df['rooms_number'])
+
+
+
+# Columns to be dropped off the dataset
+df = df.drop(['Unnamed: 0','open_fire','Unnamed: 0.1','source','hyperlink','locality',
+ 'sale','garden_area','land_surface','land_plot_surface','terrace_area'], axis =1)
 
 df.to_csv(r'/home/becode/Desktop/BXL-Bouman-2.22/data_vis/updated_1.csv', index = False)
