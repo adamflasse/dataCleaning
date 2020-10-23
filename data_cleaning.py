@@ -60,37 +60,38 @@ def building_condition(x) :
     else :
         return 'Not specified' 
 
+'''Function to clean the garden column '''
+def garden_cl(x):
+    if pd.isnull(x):
+        return 'Not specified'
+    elif x == 'True' :
+        return True
+    else :
+        return False
+
+#Updating the garden column
+df['garden'] = df['garden'].apply(garden_cl)
+
 #Updating the Building state column
 df['building_state'] = df['building_state'].apply(building_condition)
 
+df=df.replace('None', np.nan)
+df=df.dropna(subset=['price','rooms_number','area','facades_number'])
 
-#Cleaning the Price column in the dataframe
-columns = ['price']
-df = df.replace(0, np.nan).dropna(axis=0, how='any', subset=columns)
-df = df.replace('None', np.nan).dropna(axis=0, how='any', subset=columns)
-
-df['price']= df['price'].apply(lambda x : str(x).replace('€',' ').strip())
-df['price']= df['price'].apply(lambda x : str(x).replace('.',''))
-df['price']= df['price'].apply(lambda x : str(x).replace(',',''))
-df['price'] = pd.to_numeric(df['price'])
-
-#Cleaning the Area column in the dataframe
-columns = ['area']
-df = df.replace(0, np.nan).dropna(axis=0, how='any', subset=columns)
-df = df.replace('None', np.nan).dropna(axis=0, how='any', subset=columns)
-df['area'] = df['area'].apply(lambda x: str(x).strip().replace('m2 ',''))
-df['area'] = pd.to_numeric(df['area'])
-
-#Cleaning the Swimming pool column in the dataframe
+#Cleaning the Swimming pool, Kitchen and furnished column in the dataframe
 df['swimming_pool_has'] = df['swimming_pool_has'].apply(lambda x : 'Not specified' if pd.isnull(x) else False)
+df['kitchen_has'] = df['kitchen_has'].apply(lambda x : 'Not specified' if pd.isnull(x) else False)
+df['furnished'] = df['furnished'].apply(lambda x : 'Not specified' if pd.isnull(x) else False)
 
-#Cleaning the Room Number column in the dataframe
-columns = ['rooms_number']
-data_viz01 = df
-df = df.replace(0, np.nan).dropna(axis=0, how='any', subset=columns)
-df = df.replace('None', np.nan).dropna(axis=0, how='any', subset=columns)
-df['rooms_number'] = pd.to_numeric(df['rooms_number'])
+''' Removing the € and commas and splitting the price on integer '''
+df['price']= df['price'].apply(lambda x : str(x).replace('€','').strip())
+df['price']= df['price'].apply(lambda x : str(x).split('.')[0])
+df['price']= df['price'].apply(lambda x : str(x).replace(',',''))
+df['price']=df["price"].astype(str).astype(float)
 
+#Cleaning the area column
+df['area'] = df['area'].apply(lambda x: str(x).strip().replace('m2 ',''))
+df['area']=df["area"].astype(str).astype(float)
 
 
 # Columns to be dropped off the dataset
