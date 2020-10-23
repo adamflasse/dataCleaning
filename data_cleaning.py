@@ -72,6 +72,18 @@ def garden_cl(x):
 #Updating the garden column
 df['garden'] = df['garden'].apply(garden_cl)
 
+'''Function to clean the garden column '''
+def terrace_cl(x):
+    if pd.isnull(x):
+        return 'Not specified'
+    elif x == 'False' :
+        return False
+    else :
+        return True
+
+#Updating the garden column
+df['terrace'] = df['terrace'].apply(garden_cl)
+
 #Updating the Building state column
 df['building_state'] = df['building_state'].apply(building_condition)
 
