@@ -81,6 +81,15 @@ def terrace_cl(x):
     else :
         return True
 
+#Updating the kitchen column
+def kitchen_cl(x):
+    if pd.isnull(x):
+        return 'Not specified'
+    elif x == False :
+        return False
+    else :
+        return True
+
 #Updating the garden column
 df['terrace'] = df['terrace'].apply(garden_cl)
 
@@ -90,10 +99,11 @@ df['building_state'] = df['building_state'].apply(building_condition)
 df=df.replace('None', np.nan)
 df=df.dropna(subset=['price','rooms_number','area','facades_number'])
 
+
 #Cleaning the Swimming pool, Kitchen and furnished column in the dataframe
 df['swimming_pool_has'] = df['swimming_pool_has'].apply(lambda x : 'Not specified' if pd.isnull(x) else False)
-df['kitchen_has'] = df['kitchen_has'].apply(lambda x : 'Not specified' if pd.isnull(x) else False)
-df['furnished'] = df['furnished'].apply(lambda x : 'Not specified' if pd.isnull(x) else False)
+df['kitchen_has']= df['kitchen_has'].apply(kitchen_cl)
+df['furnished']= df['furnished'].apply(kitchen_cl)
 
 ''' Removing the € and commas and splitting the price on integer '''
 df['price']= df['price'].apply(lambda x : str(x).replace('€','').strip())
@@ -109,5 +119,11 @@ df['area']=df["area"].astype(str).astype(float)
 # Columns to be dropped off the dataset
 df = df.drop(['Unnamed: 0','open_fire','Unnamed: 0.1','source','hyperlink','locality',
  'sale','garden_area','land_surface','land_plot_surface','terrace_area'], axis =1)
+
+print(df['kitchen_has'].value_counts())
+print(df['terrace'].value_counts())
+print(df['garden'].value_counts())
+print(df['furnished'].value_counts())
+print(df['kitchen_has'].value_counts())
 
 df.to_csv(r'/home/becode/Desktop/BXL-Bouman-2.22/data_vis/updated_1.csv', index = False)
