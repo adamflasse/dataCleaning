@@ -60,20 +60,8 @@ def building_condition(x) :
     else :
         return 'Not specified' 
 
-'''Function to clean the garden column '''
+'''Function to clean the garden & Terrace column '''
 def garden_cl(x):
-    if pd.isnull(x):
-        return 'Not specified'
-    elif x == 'True' :
-        return True
-    else :
-        return False
-
-#Updating the garden column
-df['garden'] = df['garden'].apply(garden_cl)
-
-'''Function to clean the garden column '''
-def terrace_cl(x):
     if pd.isnull(x):
         return 'Not specified'
     elif x == 'False' :
@@ -81,7 +69,13 @@ def terrace_cl(x):
     else :
         return True
 
-#Updating the kitchen column
+#Updating the garden column
+df['garden'] = df['garden'].apply(garden_cl)
+
+#Updating the Terrace column
+df['terrace'] = df['terrace'].apply(garden_cl)
+
+#Updating the kitchen and furnished column
 def kitchen_cl(x):
     if pd.isnull(x):
         return 'Not specified'
@@ -90,8 +84,12 @@ def kitchen_cl(x):
     else :
         return True
 
-#Updating the garden column
-df['terrace'] = df['terrace'].apply(garden_cl)
+
+
+#Cleaning the Swimming pool, Kitchen and furnished column in the dataframe
+df['swimming_pool_has'] = df['swimming_pool_has'].apply(lambda x : 'Not specified' if pd.isnull(x) else False)
+df['kitchen_has']= df['kitchen_has'].apply(kitchen_cl)
+df['furnished']= df['furnished'].apply(kitchen_cl)
 
 #Updating the Building state column
 df['building_state'] = df['building_state'].apply(building_condition)
@@ -99,11 +97,6 @@ df['building_state'] = df['building_state'].apply(building_condition)
 df=df.replace('None', np.nan)
 df=df.dropna(subset=['price','rooms_number','area','facades_number'])
 
-
-#Cleaning the Swimming pool, Kitchen and furnished column in the dataframe
-df['swimming_pool_has'] = df['swimming_pool_has'].apply(lambda x : 'Not specified' if pd.isnull(x) else False)
-df['kitchen_has']= df['kitchen_has'].apply(kitchen_cl)
-df['furnished']= df['furnished'].apply(kitchen_cl)
 
 ''' Removing the € and commas and splitting the price on integer '''
 df['price']= df['price'].apply(lambda x : str(x).replace('€','').strip())
@@ -120,10 +113,5 @@ df['area']=df["area"].astype(str).astype(float)
 df = df.drop(['Unnamed: 0','open_fire','Unnamed: 0.1','source','hyperlink','locality',
  'sale','garden_area','land_surface','land_plot_surface','terrace_area'], axis =1)
 
-print(df['kitchen_has'].value_counts())
-print(df['terrace'].value_counts())
-print(df['garden'].value_counts())
-print(df['furnished'].value_counts())
-print(df['kitchen_has'].value_counts())
 
 df.to_csv(r'/home/becode/Desktop/BXL-Bouman-2.22/data_vis/updated_1.csv', index = False)
