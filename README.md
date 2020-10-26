@@ -3,6 +3,8 @@ by: Dilara P. - Ankita H. - Christophe S. - Adam F.
 
 The purpose here is to clean a dataset with different sources of information.
 
+Please click [here] (https://drive.google.com/file/d/1YY-QRAKNAR1Kg_htWioGengq8mv5aUU5/view?usp=sharing) for the presentation.
+
 ## Dealing with duplicates
 First thing first we had to find the possible duplicates in the dataset.
 So there were several problems in order to make such a thing possible. The main one was to have each element of the column 'hyperlink' in the same format. 
